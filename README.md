@@ -9,9 +9,7 @@ From command line -
 ```
 go. build main.go
 ```
-3. ```
-./main
-```
+3. ```./main```
 
 ## Cmmnd Line Flag Options and Output
 You have 2 flag at your disposale: 
