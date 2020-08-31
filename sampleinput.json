@@ -1,0 +1,52 @@
+{
+  "API_TOKEN": "XXX",
+  "user": "XXX",
+  "userrepo": "XXX",
+  "packagename": "XXX",
+  "packages": [
+    {
+      "pkgversion": "6.0.0",
+      "release": "3003",
+      "distro_p": "el",
+      "version_p": [
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "pkgversion": "5.21.0",
+      "release": "14262",
+      "distro_p": "el",
+      "version_p": [
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "pkgversion": "5.20.2",
+      "release": "12959",
+      "distro_p": "el",
+      "version_p": [
+        6,
+        7,
+        8
+      ]
+    }
+  ],
+  "repositories": [
+    {
+      "distro_r": "el",
+      "version_r": "6"
+    },
+    {
+      "distro_r": "el",
+      "version_r": "7"
+    },
+    {
+      "distro_r": "el",
+      "version_r": "8"
+    }
+  ]
+}
