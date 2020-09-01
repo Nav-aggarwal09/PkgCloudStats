@@ -14,16 +14,18 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
-	"flag"
+	"strings"
 )
 
 const DEFAULT_START_DATEZ = "19900101Z"
 const DEFAULT_CONFIG = "Pkgcloud-Counter-config.json"
+
 var DebugLvl bool
 var API_TOKEN string
 
@@ -38,11 +40,11 @@ type CounterHeader struct {
 }
 
 type SensuPkg struct {
-	PkgVersion string `json:"pkgversion"` // 5.20.6
-	Release    string `json:"release"`    //3425
-	Distro     string `json:"distro_p"`
-	Version    []int  `json:"version_p"`
-	Downloads  []int  //for each version
+	PkgVersion string   `json:"pkgversion"` // 5.20.6
+	Release    string   `json:"release"`    //3425
+	Distro     string   `json:"distro_p"`
+	Version    []string `json:"version_p"`
+	Downloads  []int    //for each version
 }
 
 type SensuRepo struct {
@@ -76,7 +78,6 @@ func getDownloads(pkgptr *SensuPkg, pkgname, startdatez, user, repo string) {
 			log.Printf("pkgVer %v had %v downloads", pkgptr.PkgVersion, cr.Value)
 		}
 
-
 		if len(pkgptr.Downloads)-1 >= i {
 			pkgptr.Downloads[i] = cr.Value
 		} else {
@@ -87,7 +88,6 @@ func getDownloads(pkgptr *SensuPkg, pkgname, startdatez, user, repo string) {
 	if DebugLvl {
 		log.Printf("Finished download count for pkg ver %v", pkgptr.PkgVersion)
 	}
-
 
 } // end getDownloads()
 
@@ -121,20 +121,28 @@ func getInstalls(sensuptr *SensuRepo, startdatez, user, repo string) {
 
 func main() {
 
-
 	/**
 	 * Read and parse the JSON configuration file
 	 */
 	var config string
 
-	filePtr  := flag.String("config", DEFAULT_CONFIG, "path to config file")
+	filePtr := flag.String("config", DEFAULT_CONFIG, "path to config file")
 	debugPtr := flag.Bool("debug", false, "Log level")
 	flag.Parse()
 
 	DebugLvl = *debugPtr // set log level
 	log.Println("Set debug to ", DebugLvl)
 
-	config = *filePtr
+	if strings.EqualFold(*filePtr, "ENV") {
+		if os.Getenv("PKGCLOUD_API_TOKEN") == "" {
+			log.Fatal("Cannot find Pkgcloud API token in enviornment")
+		} else {
+			config = os.Getenv("PKGCLOUD_API_TOKEN")
+		}
+	} else {
+		config = *filePtr
+	}
+
 	log.Println("Set file to ", config)
 
 	file, err := os.Open(config)
@@ -195,13 +203,10 @@ func main() {
 		fmt.Println(pkg)
 	}
 
-
 	// installs for repos
 	fmt.Println("INSTALLS")
 	for _, repo := range parsedfile.Repos {
 		fmt.Println(repo)
 	}
-
-
 
 } // end: main()
