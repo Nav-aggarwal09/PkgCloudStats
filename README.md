@@ -19,6 +19,7 @@ You have 2 flag at your disposal:
 The number of downloads for each package will output to the console for each version shown respectivley. 
 The number of installs will also output to console for each repo
 ### Sample output
+```
 2020/08/31 12:47:12 Set debug to  false
 
 2020/08/31 12:47:12 Set file to  Pkgcloud-Counter-config.json
@@ -42,3 +43,4 @@ INSTALLS
 {el 7 38130}
 
 {el 8 908}
+```
