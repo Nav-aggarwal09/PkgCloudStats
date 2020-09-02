@@ -42,6 +42,7 @@ type CounterHeader struct {
 type SensuPkg struct {
 	PkgVersion string   `json:"pkgversion"` // 5.20.6
 	Release    string   `json:"release"`    //3425
+	Arch       string   `json:"arch"`
 	Distro     string   `json:"distro_p"`
 	Version    []string `json:"version_p"`
 	Downloads  []int    //for each version
@@ -61,8 +62,9 @@ func getDownloads(pkgptr *SensuPkg, pkgname, startdatez, user, repo string) {
 
 	for i, ver := range pkgptr.Version {
 		url := fmt.Sprintf("https://%v:@packagecloud.io/api/v1/repos/%v/%v/"+
-			"package/rpm/%v/%v/%v/x86_64/%v/%v/stats/downloads/count.json?start_date=%v",
-			API_TOKEN, user, repo, pkgptr.Distro, ver, pkgname, pkgptr.PkgVersion, pkgptr.Release, startdatez)
+			"package/rpm/%v/%v/%v/%v/%v/%v/stats/downloads/count.json?start_date=%v",
+			API_TOKEN, user, repo, pkgptr.Distro, ver,
+			pkgname, pkgptr.Arch, pkgptr.PkgVersion, pkgptr.Release, startdatez)
 		response, err := http.Get(url)
 		if err != nil {
 			log.Fatal("Get request failed: ", err.Error())
